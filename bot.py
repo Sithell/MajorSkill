@@ -1,12 +1,24 @@
 from engine import Engine
-import telebot
+from telebot import TeleBot, types
 
-token = '339228067:AAGSfEToYqzde-oCeeDSypCxruugwp2PBo4'
-bot = telebot.TeleBot(token)
+token = '396661224:AAEhmcS8sfEL7dq9892WNUOWTWWGCyfNKDw'
+bot = TeleBot(token)
+loading = open('loading.gif', 'rb')
+
+@bot.message_handler(commands=["start", "info"])
+def info(message):
+    markup = types.ReplyKeyboardMarkup(row_width=2)
+    btn1 = types.KeyboardButton("Web-разработчик")
+    btn2 = types.KeyboardButton("Android developer")
+    btn3 = types.KeyboardButton("Программист Unity")
+    btn4 = types.KeyboardButton("Web-дизайнер")
+    markup.add(btn1, btn2, btn3, btn4)
+    bot.send_message(message.chat.id, "Введите название специальности или выберите из списка:", reply_markup=markup)
 
 
 @bot.message_handler(content_types=["text"])
 def message_handler(message):
+    bot.send_document(message.chat.id, loading)
     print(message.text)
     engine = Engine()
     result = engine.parser(message.text)

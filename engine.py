@@ -1,10 +1,7 @@
-
-
 import sqlite3
 import requests
 import operator
 
-d = ['fef']
 class Engine:
     def __init__(self):
         self.conn = sqlite3.connect('data.db')
@@ -32,7 +29,7 @@ class Engine:
         result = self.database.fetchall()
         return [x[0] for x in result]
 
-    def parser(self, text, per_page=50):
+    def parser(self, text, per_page=30):
         main_domain = 'http://api.hh.ru/'
         search_output = requests.get(main_domain + 'vacancies/', params={'text': text, 'per_page': per_page}).json()
         found = 0
