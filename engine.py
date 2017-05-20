@@ -59,7 +59,7 @@ class Engine:
         new_skills = [s.rstrip().lower() for s in new_skills_file.readlines()]
         new_skills_file.close()
 
-        new_skills_file = open('new_skills.log', 'a')
+        new_skills_file = open('new_skills.log', 'a', encoding='UTF-8')
         for i in self.skills:
             known = False
             for j in self.skills_db:
@@ -84,4 +84,4 @@ class Engine:
 
 if __name__ == '__main__':
     parser = Engine()
-    print(parser.parser(input()))
+    print(parser.parser(input("Введите название специальности:")))

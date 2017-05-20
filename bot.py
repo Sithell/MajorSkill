@@ -1,9 +1,11 @@
 from engine import Engine
 from telebot import TeleBot, types
+import threading
+import time
 
 token = '396661224:AAEhmcS8sfEL7dq9892WNUOWTWWGCyfNKDw'
 bot = TeleBot(token)
-loading = open('loading.gif', 'rb')
+result = None
 
 @bot.message_handler(commands=["start", "info"])
 def info(message):
@@ -18,7 +20,8 @@ def info(message):
 
 @bot.message_handler(content_types=["text"])
 def message_handler(message):
-    bot.send_document(message.chat.id, loading)
+    global result
+    threading.Timer(0, play_animation, args=[message.chat.id]).start()
     print(message.text)
     engine = Engine()
     result = engine.parser(message.text)
@@ -32,7 +35,26 @@ def message_handler(message):
 
         bot.send_message(message.chat.id, answer)
 
+    result = None
     del engine
+
+
+def play_animation(chat_id):
+    global result
+    message_id = bot.send_message(chat_id, "Подождите...").message_id
+    time.sleep(0.25)
+    while not result:
+        bot.edit_message_text("Подождите", chat_id, message_id)
+        time.sleep(0.25)
+        bot.edit_message_text("Подождите.", chat_id, message_id)
+        time.sleep(0.25)
+        bot.edit_message_text("Подождите..", chat_id, message_id)
+        time.sleep(0.25)
+        bot.edit_message_text("Подождите...", chat_id, message_id)
+        time.sleep(0.25)
+
+    bot.edit_message_text("Готово!", chat_id, message_id)
+
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
