@@ -2,15 +2,21 @@ import sqlite3
 import requests
 import operator
 
+
 class Engine:
     def __init__(self):
         self.conn = sqlite3.connect('data.db')
         self.database = self.conn.cursor()
         self.skills_db = {x.lower(): 0 for x in self.get_item('skills')}
+        try:
+            blacklist_file = open('blacklist.txt')
 
-        blacklist_file = open('blacklist.txt')
-        self.blacklist = [s.rstrip() for s in blacklist_file.readlines()]
-        blacklist_file.close()
+        except FileNotFoundError:
+            self.blacklist = []
+
+        else:
+            self.blacklist = [s.rstrip() for s in blacklist_file.readlines()]
+            blacklist_file.close()
 
         self.skills = []
 
