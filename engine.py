@@ -77,5 +77,5 @@ class Engine:
 
 
 if __name__ == '__main__':
-    parser = Parser()
-    print(parser.main(input()))
+    parser = Engine()
+    print(parser.parser(input()))
