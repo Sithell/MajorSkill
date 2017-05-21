@@ -55,22 +55,10 @@ class Engine:
         blacklist_file.write('\n'.join(self.blacklist))
         blacklist_file.close()
 
-        new_skills_file = open('new_skills.log')
-        new_skills = [s.rstrip().lower() for s in new_skills_file.readlines()]
-        new_skills_file.close()
-
-        new_skills_file = open('new_skills.log', 'a', encoding='UTF-8')
         for i in self.skills:
-            known = False
             for j in self.skills_db:
                 if i in j.split(', '):
                     self.skills_db[j] += 1 / found
-                    known = True
-
-            if not known and i not in new_skills:
-                new_skills_file.write(i + '\n')
-
-        new_skills_file.close()
 
         skills = []
         percents = []
