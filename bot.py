@@ -22,11 +22,9 @@ def info(message):
 def message_handler(message):
     global result
     threading.Timer(0, play_animation, args=[message.chat.id]).start()
-    print(message.text)
+    print("message received")
     engine = Engine()
     result = engine.parser(message.text)
-    print(result)
-    print()
 
     for item in result:  # pretty print
         percent = str(round(item[1] * 100)) + '%'
