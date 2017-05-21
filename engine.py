@@ -8,16 +8,6 @@ class Engine:
         self.conn = sqlite3.connect('data.db')
         self.database = self.conn.cursor()
         self.skills_db = {x.lower(): 0 for x in self.get_item('skills')}
-        try:
-            blacklist_file = open('blacklist.txt')
-
-        except FileNotFoundError:
-            self.blacklist = []
-
-        else:
-            self.blacklist = [s.rstrip() for s in blacklist_file.readlines()]
-            blacklist_file.close()
-
         self.skills = []
 
     def __del__(self):
@@ -36,24 +26,16 @@ class Engine:
         return [x[0] for x in result]
 
     def parser(self, text, per_page=30):
-        main_domain = 'http://api.hh.ru/'
-        search_output = requests.get(main_domain + 'vacancies/', params={'text': text, 'per_page': per_page}).json()
+        search_output = requests.get('http://api.hh.ru/vacancies/', params={'text': text, 'per_page': per_page}).json()
         found = 0
 
         for item in search_output['items']:
-            if not item['id'] in self.blacklist:
-                vacancy = requests.get(main_domain + 'vacancies/' + item['id']).json()
-                key_skills = vacancy['key_skills']
-                if key_skills:
-                    found += 1
-                    self.skills += [x['name'].lower() for x in key_skills]
+            vacancy = requests.get('http://api.hh.ru/vacancies/' + item['id']).json()
+            key_skills = vacancy['key_skills']
+            if key_skills:
+                found += 1
+                self.skills += [x['name'].lower() for x in key_skills]
 
-                else:
-                    self.blacklist.append(item['id'])
-
-        blacklist_file = open('blacklist.txt', 'a')
-        blacklist_file.write('\n'.join(self.blacklist))
-        blacklist_file.close()
         for i in self.skills:
             for j in self.skills_db:
                 if i in j.split(', '):
