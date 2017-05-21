@@ -1,11 +1,10 @@
 from engine import Engine
 from telebot import TeleBot, types
-import threading
-import time
+# import threading
+# import time
 
 token = '396661224:AAEhmcS8sfEL7dq9892WNUOWTWWGCyfNKDw'
 bot = TeleBot(token)
-event = threading.Event()
 
 
 @bot.message_handler(commands=["start", "info"])
@@ -21,7 +20,6 @@ def info(message):
 
 @bot.message_handler(content_types=["text"])
 def message_handler(message):
-    global event
     # threading.Timer(0, play_animation, args=[message.chat.id]).start()
     print("message received: chat id {0}, message id {1}".format(message.chat.id, message.message_id))
     bot.send_message(message.chat.id, "Подождите...")
@@ -36,27 +34,26 @@ def message_handler(message):
 
         bot.send_message(message.chat.id, answer)
 
-    event.set()
     del engine
 
 
-def play_animation(chat_id):
-    global event
-    message_id = bot.send_message(chat_id, "Подождите...").message_id
-    time.sleep(0.25)
-
-    while not event.is_set():
-        bot.edit_message_text("Подождите", chat_id, message_id)
-        time.sleep(0.25)
-        bot.edit_message_text("Подождите.", chat_id, message_id)
-        time.sleep(0.25)
-        bot.edit_message_text("Подождите..", chat_id, message_id)
-        time.sleep(0.25)
-        bot.edit_message_text("Подождите...", chat_id, message_id)
-        time.sleep(0.25)
-
-    bot.edit_message_text("Готово!", chat_id, message_id)
-    event.clear()
+# def play_animation(chat_id):
+#     global event
+#     message_id = bot.send_message(chat_id, "Подождите...").message_id
+#     time.sleep(0.25)
+#
+#     while not event.is_set():
+#         bot.edit_message_text("Подождите", chat_id, message_id)
+#         time.sleep(0.25)
+#         bot.edit_message_text("Подождите.", chat_id, message_id)
+#         time.sleep(0.25)
+#         bot.edit_message_text("Подождите..", chat_id, message_id)
+#         time.sleep(0.25)
+#         bot.edit_message_text("Подождите...", chat_id, message_id)
+#         time.sleep(0.25)
+#
+#     bot.edit_message_text("Готово!", chat_id, message_id)
+#     event.clear()
 
 
 if __name__ == '__main__':
