@@ -43,9 +43,9 @@ class Engine:
                 if j in i.split(', '):
                     self.skills_db[i] += 1 / found
 
-        print(found, len(self.skills), len(self.skills_db))
-        print(self.skills)
-        print(self.skills_db)
+        # print(found, len(self.skills), len(self.skills_db))
+        # print(self.skills)
+        # print(self.skills_db)
         skills = []
         percents = []
         for item in self.skills_db:

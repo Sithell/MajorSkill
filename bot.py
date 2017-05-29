@@ -22,8 +22,8 @@ def info(message):
 @bot.message_handler(content_types=["text"])
 def message_handler(message):
     # threading.Timer(0, play_animation, args=[message.chat.id]).start()
-    print("recieved message")
-    bot.send_message(message.chat.id, "Подождите...")
+    print("received message")
+    msg_id = bot.send_message(message.chat.id, "Подождите...").message_id
     engine = Engine()
     result = engine.parser(message.text)
 
@@ -34,6 +34,7 @@ def message_handler(message):
 
         bot.send_message(message.chat.id, answer)
 
+    bot.edit_message_text("Готово!", chat_id=message.chat.id, message_id=msg_id)
     del engine
 
 
