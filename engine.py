@@ -26,7 +26,9 @@ class Engine:
         return [x[0] for x in result]
 
     def parser(self, text, per_page=30):
-        search_output = requests.get('http://api.hh.ru/vacancies/', params={'text': text, 'per_page': per_page}).json()
+        search_output = requests.get('http://api.hh.ru/vacancies/',
+                                     params={'text': text, 'per_page': per_page}).json()
+
         found = 0
 
         for item in search_output['items']:
@@ -36,11 +38,14 @@ class Engine:
                 found += 1
                 self.skills += [x['name'].lower() for x in key_skills]
 
-        for i in self.skills:
-            for j in self.skills_db:
-                if i in j.split(', '):
-                    self.skills_db[j] += 1 / found
+        for i in self.skills_db:
+            for j in self.skills:
+                if j in i.split(', '):
+                    self.skills_db[i] += 1 / found
 
+        print(found, len(self.skills), len(self.skills_db))
+        print(self.skills)
+        print(self.skills_db)
         skills = []
         percents = []
         for item in self.skills_db:
