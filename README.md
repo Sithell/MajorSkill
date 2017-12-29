@@ -1,2 +1,2 @@
 # MajorSkill
-My project for Spring 4kids hackaton
+Learn what skills are most demanded nowadays.
